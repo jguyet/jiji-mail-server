@@ -85,7 +85,7 @@ const pop3Server = () => {
     
             return callback(mails.map((x, index) => {
                 return {
-                    uid: `m${index + 1}`,
+                    uid: x.uid,
                     size: toPopEmail(x).length,
                     body: toPopEmail(x)
                 };
@@ -103,12 +103,13 @@ const pop3Server = () => {
                 return callback([]);
             }
             const mails = JSON.parse(fs.readFileSync(path).toString());
-    
-            return callback(mails.map((x, index) => {
+            const lst = mails.map((x, index) => {
                 return {
                     uid: x.uid
                 };
-            }));
+            });
+            console.log(lst);
+            return callback(lst);
         });
     
         connection.on('retr', function(mail_index, callback){
@@ -130,7 +131,7 @@ const pop3Server = () => {
             }
 
             callback({
-                uid: `m${mail_index}`,
+                uid: x.uid,
                 size: toPopEmail(selectedMail).length,
                 body: toPopEmail(selectedMail)
             });
