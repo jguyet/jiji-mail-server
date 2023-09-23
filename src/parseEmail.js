@@ -9,7 +9,8 @@ async function parseEmail(message) {
       text: '',
       html: '',
       from: '',
-      to: ''
+      to: '',
+      subject: ''
     };
 
     // Écoutez les événements de l'analyseur de messagerie pour extraire les informations
@@ -20,6 +21,9 @@ async function parseEmail(message) {
       }
       if (headers.get('to')) {
         emailData.to = headers.get('to')?.text ?? '';
+      }
+      if (headers.get('subject')) {
+        emailData.subject = headers.get('subject') ?? '';
       }
     });
 
