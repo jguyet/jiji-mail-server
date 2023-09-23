@@ -106,9 +106,7 @@ const pop3Server = () => {
     
             return callback(mails.map((x, index) => {
                 return {
-                    uid: `m${index + 1}`,
-                    size: toPopEmail(x).length,
-                    body: toPopEmail(x)
+                    uid: x.uid
                 };
             }));
         });

@@ -3,6 +3,7 @@ const { smtpServer } = require('./src/smtp');
 const { pop3Server } = require('./src/pop3');
 const { sendEmail } = require('./src/sendEmail');
 const { formatEmailAddress } = require('./src/utils');
+const { v4 } = require('uuid');
 const fs = require('fs');
 
 const emailBase = [
@@ -21,6 +22,8 @@ const smtp = smtpServer({
         await sendEmail(email.from, email.to, email.subject, email.text);
     } else if (emailBase.find(x => email.to.includes(x)) != undefined) {
         console.log(`Email Received ${email.to} <- ${email.from}`);
+
+        email.uid = v4();
 
         const to = formatEmailAddress(email.to);
         const mailsPath = `./mails/${to}.json`;
