@@ -37,7 +37,7 @@ function resolveMxRecords(domain) {
 async function sendEmail(from, to, subject, text) {
     return await new Promise((resolve) => {
         try {
-            const toEmail = to;
+            let toEmail = to;
             if (toEmail.includes('<') && toEmail.includes('>')) {
                 toEmail = toEmail.split('<')[1].split('>')[0];
             }
@@ -67,7 +67,7 @@ async function sendEmail(from, to, subject, text) {
             });
 
         } catch (error) {
-            console.error(error.message);
+            console.error(error);
             resolve(false);
         }
     })
