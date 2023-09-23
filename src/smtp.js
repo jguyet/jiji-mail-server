@@ -13,7 +13,7 @@ const smtpServer = (settings = { username: 'project', password: 'secret' }, on =
         // not required but nice-to-have
         banner: 'Welcome to My Awesome SMTP Server',
 
-        disabledCommands: [],//['STARTTLS'],
+        disabledCommands: ['STARTTLS'],
 
         options: {
             authOptional: true,
