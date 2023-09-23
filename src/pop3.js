@@ -132,7 +132,7 @@ const pop3Server = () => {
             }
 
             callback({
-                uid: x.uid,
+                uid: selectedMail.uid,
                 size: toPopEmail(selectedMail).length,
                 body: toPopEmail(selectedMail)
             });
