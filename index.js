@@ -15,4 +15,4 @@ const smtp = smtpServer({
     }
 });
 
-smtp.run(1025, "0.0.0.0");
+smtp.run(25, "0.0.0.0");
