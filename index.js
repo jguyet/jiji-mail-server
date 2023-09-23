@@ -8,7 +8,7 @@ const smtp = smtpServer({
     password: 'secret'
 }, async (email) => {
     if (email.from.includes('checkdot.io')) {
-        console.log(`Email Sending ${email.from} -> ${email.to}`, email);
+        console.log(`Email Sending ${email.from} -> ${email.to} - ${email.subject}`, email);
         await sendEmail(email.from, email.to, email.subject, email.text);
     } else {
         console.log(`Email Received ${email.to} <- ${email.from}`, email);
