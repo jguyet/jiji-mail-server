@@ -79,7 +79,7 @@ const pop3Server = () => {
             }
             const path = `./mails/${connectedUser.user}.json`;
             if (!fs.existsSync(path)) {
-                return callback(0, 236);
+                return callback([]);
             }
             const mails = JSON.parse(fs.readFileSync(path).toString());
     
@@ -97,9 +97,10 @@ const pop3Server = () => {
             if (connectedUser.authenticated == false) { // not authenticated
                 return callback([]);
             }
+            console.log(`${connectedUser.user} uidl list`);
             const path = `./mails/${connectedUser.user}.json`;
             if (!fs.existsSync(path)) {
-                return callback(0, 236);
+                return callback([]);
             }
             const mails = JSON.parse(fs.readFileSync(path).toString());
     
