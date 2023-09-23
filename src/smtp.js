@@ -14,8 +14,7 @@ const smtpServer = (settings = { username: 'project', password: 'secret' }, on =
         banner: 'Welcome to My Awesome SMTP Server',
 
         disabledCommands: ['STARTTLS'],
-
-        authOptional: true, // optionnal
+        authOptional: true, // for receive emails
 
         // By default only PLAIN and LOGIN are enabled
         authMethods: ['PLAIN', 'LOGIN', 'CRAM-MD5'],
@@ -94,7 +93,11 @@ const smtpServer = (settings = { username: 'project', password: 'secret' }, on =
                     err.responseCode = 552;
                     return callback(err);
                 }
-                await on(await parseEmail(emailData));
+                let email = await parseEmail(emailData);
+                email.timestamp = (new Date()).getTime() / 1000;
+
+                await on(email);// event
+
                 callback(null, 'Message queued'); // accept the message once the stream is ended
             });
         }

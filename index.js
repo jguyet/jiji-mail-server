@@ -1,6 +1,8 @@
 const nodemailer = require("nodemailer");
 const { smtpServer } = require('./src/smtp');
+const { pop3Server } = require('./src/pop3');
 const { sendEmail } = require('./src/sendEmail');
+const { formatEmailAddress } = require('./src/utils');
 const fs = require('fs');
 
 const emailBase = [
@@ -15,11 +17,24 @@ const smtp = smtpServer({
     password: 'secret'
 }, async (email) => {
     if (emailBase.find(x => email.from.includes(x)) != undefined) {
-        console.log(`Email Sending ${email.from} -> ${email.to} - ${email.subject}`, email);
+        console.log(`Email Sending ${email.from} -> ${email.to} - ${email.subject}`);
         await sendEmail(email.from, email.to, email.subject, email.text);
-    } else {
-        console.log(`Email Received ${email.to} <- ${email.from}`, email);
+    } else if (emailBase.find(x => email.to.includes(x)) != undefined) {
+        console.log(`Email Received ${email.to} <- ${email.from}`);
+
+        const to = formatEmailAddress(email.to);
+        const mailsPath = `./mails/${to}.json`;
+        if (!fs.existsSync(mailsPath)) {
+            fs.writeFileSync(mailsPath, '[]');
+        }
+        let mails = JSON.parse(fs.readFileSync(mailsPath).toString());
+        mails.push(email);
+        fs.writeFileSync(mailsPath, JSON.stringify(mails, null, 4));
+        console.log(`Email Saved ${email.to} <- ${email.from}`);
     }
 });
 
+const pop3 = pop3Server();
+
 smtp.run(25, "0.0.0.0");
+pop3.run(110);
