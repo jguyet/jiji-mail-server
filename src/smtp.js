@@ -13,7 +13,7 @@ const smtpServer = (settings = { username: 'project', password: 'secret' }, on =
         // not required but nice-to-have
         banner: 'Welcome to My Awesome SMTP Server',
 
-        disabledCommands: ['STARTTLS'],
+        disabledCommands: [],//['STARTTLS'],
 
         // By default only PLAIN and LOGIN are enabled
         authMethods: ['PLAIN', 'LOGIN', 'CRAM-MD5'],
@@ -32,7 +32,7 @@ const smtpServer = (settings = { username: 'project', password: 'secret' }, on =
         // Setup authentication
         // Allow only users with username 'testuser' and password 'testpass'
         onAuth(auth, session, callback) {
-            console.log('ON AUTH', auth);
+            console.log('ON AUTH', auth, session);
             // check username and password
             if (
                 auth.username === settings.username &&
@@ -50,6 +50,7 @@ const smtpServer = (settings = { username: 'project', password: 'secret' }, on =
         // Validate MAIL FROM envelope address. Example allows all addresses that do not start with 'deny'
         // If this method is not set, all addresses are allowed
         onMailFrom(address, session, callback) {
+            console.log('onMailFrom', address, session);
             if (/^deny/i.test(address.address)) {
                 return callback(new Error('Not accepted'));
             }
