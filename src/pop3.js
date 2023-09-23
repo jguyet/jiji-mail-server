@@ -100,6 +100,7 @@ const pop3Server = () => {
             console.log(`${connectedUser.user} uidl list`);
             const path = `./mails/${connectedUser.user}.json`;
             if (!fs.existsSync(path)) {
+                console.log('Empty');
                 return callback([]);
             }
             const mails = JSON.parse(fs.readFileSync(path).toString());
