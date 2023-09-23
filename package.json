@@ -1,0 +1,19 @@
+{
+  "name": "jiji-node-mailer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dns": "^0.2.2",
+    "mailparser": "^3.6.5",
+    "nodemailer": "^6.9.5",
+    "pop3-server": "0.0.2",
+    "sendmail": "^1.6.1",
+    "smtp-server": "^3.13.0"
+  }
+}
