@@ -14,6 +14,7 @@
     "nodemailer": "^6.9.5",
     "pop3-server": "git+https://github.com/jguyet/pop3-server.git",
     "sendmail": "^1.6.1",
-    "smtp-server": "^3.13.0"
+    "smtp-server": "^3.13.0",
+    "uuid": "^9.0.1"
   }
 }
