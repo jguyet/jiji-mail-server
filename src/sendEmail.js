@@ -35,32 +35,37 @@ function resolveMxRecords(domain) {
 }
 
 async function sendEmail(from, to, subject, text) {
-    return await new Promise(async (resolve) => {
+    return await new Promise((resolve) => {
         try {
             const toEmail = to;
             if (toEmail.includes('<') && toEmail.includes('>')) {
                 toEmail = toEmail.split('<')[1].split('>')[0];
             }
-            const transporter = await createTransporterForEmail(toEmail);
-        
-            // Configurer l'e-mail à envoyer
-            const mailOptions = {
-                from: from,
-                to: to,
-                subject: subject,
-                text: text,
-            };
-        
-            // Envoyer l'e-mail en utilisant le transporteur configuré
-            transporter.sendMail(mailOptions, (error, info) => {
-                if (error) {
-                    console.log('Erreur lors de l\'envoi de l\'e-mail :', error);
-                    resolve(false);
-                } else {
-                    console.log('E-mail envoyé :', info.response);
-                    resolve(true);
-                }
+
+            createTransporterForEmail(toEmail).then((transporter) => {
+                // Configurer l'e-mail à envoyer
+                const mailOptions = {
+                    from: from,
+                    to: to,
+                    subject: subject,
+                    text: text,
+                };
+            
+                // Envoyer l'e-mail en utilisant le transporteur configuré
+                transporter.sendMail(mailOptions, (error, info) => {
+                    if (error) {
+                        console.log('Erreur lors de l\'envoi de l\'e-mail :', error);
+                        resolve(false);
+                    } else {
+                        console.log('E-mail envoyé :', info.response);
+                        resolve(true);
+                    }
+                });
+            }).catch((error) => {
+                console.log('Erreur lors de l\'envoi de l\'e-mail :', error);
+                resolve(false);
             });
+
         } catch (error) {
             console.error(error.message);
             resolve(false);
