@@ -15,6 +15,8 @@ const smtpServer = (settings = { username: 'project', password: 'secret' }, on =
 
         disabledCommands: [],//['STARTTLS'],
 
+        authOptional: true,
+
         // By default only PLAIN and LOGIN are enabled
         authMethods: ['PLAIN', 'LOGIN', 'CRAM-MD5'],
 
