@@ -137,6 +137,28 @@ const pop3Server = () => {
                 body: toPopEmail(selectedMail)
             });
         });
+
+        connection.on('dele', function(index, callback){
+            console.log('Deleting message ' + mail_index);
+            if (connectedUser.authenticated == false) { // not authenticated
+                return callback(undefined);
+            }
+
+            const path = `./mails/${connectedUser.user}.json`;
+            if (!fs.existsSync(path)) {
+                return callback(undefined);
+            }
+            const mails = JSON.parse(fs.readFileSync(path).toString());
+    
+            const selectedMail = mails[mail_index - 1];
+
+            if (selectedMail == undefined) {
+                return callback(false);
+            }
+            const newMails = mails.filter(x => x.uid != selectedMail.uid);
+            fs.writeFileSync(path, JSON.stringify(newMails, null, 4));
+            callback(true);
+        });
     });
 
     return {
