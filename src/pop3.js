@@ -155,6 +155,7 @@ const pop3Server = () => {
             if (selectedMail == undefined) {
                 return callback(false);
             }
+            console.log('Mail', selectedMail.uid, 'Deleted');
             const newMails = mails.filter(x => x.uid != selectedMail.uid);
             fs.writeFileSync(path, JSON.stringify(newMails, null, 4));
             callback(true);
