@@ -139,7 +139,7 @@ const pop3Server = () => {
         });
 
         connection.on('dele', function(index, callback){
-            console.log('Deleting message ' + mail_index);
+            console.log('Deleting message ' + index);
             if (connectedUser.authenticated == false) { // not authenticated
                 return callback(undefined);
             }
@@ -150,7 +150,7 @@ const pop3Server = () => {
             }
             const mails = JSON.parse(fs.readFileSync(path).toString());
     
-            const selectedMail = mails[mail_index - 1];
+            const selectedMail = mails[index - 1];
 
             if (selectedMail == undefined) {
                 return callback(false);
