@@ -9,6 +9,7 @@ const fs = require('fs');
 const emailBase = [
     'mail@checkdot.io',
     'jguyet@checkdot.io',
+    'avangarf@checkdot.io',
     'hello@linepicplus.com',
     'jguyet@linepicplus.com',
     'noreply@ampbit.xyz'
