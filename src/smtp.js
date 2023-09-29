@@ -82,7 +82,7 @@ const smtpServer = (settings = { username: 'project', password: 'secret' }, on =
         // Handle message stream
         onData(stream, session, callback) {
             let emailData = '';
-            stream.pipe(process.stdout);
+            // stream.pipe(process.stdout);
             stream.on('data', (data) => {
                 emailData += data.toString();
             });
