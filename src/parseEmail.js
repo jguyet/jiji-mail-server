@@ -10,8 +10,11 @@ async function parseEmail(message) {
       html: '',
       from: '',
       to: '',
-      subject: ''
+      subject: '',
+      data: ''
     };
+
+    emailData.data = message;
 
     // Écoutez les événements de l'analyseur de messagerie pour extraire les informations
     mailparser.on('headers', (headers) => {
