@@ -21,7 +21,7 @@ const smtp = smtpServer({
 }, async (email) => {
     if (emailBase.find(x => email.from.includes(x)) != undefined) {
         console.log(`Email Sending ${email.from} -> ${email.to} - ${email.subject}`);
-        await sendEmail(email.from, email.to, email.subject, email.text);
+        await sendEmail(email.from, email.to, email.subject, email.text, email.html, email.attachments);
     } else if (emailBase.find(x => email.to.includes(x)) != undefined) {
         console.log(`Email Received ${email.to} <- ${email.from}`);
 
