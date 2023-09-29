@@ -36,6 +36,8 @@ const smtp = smtpServer({
         mails.push(email);
         fs.writeFileSync(mailsPath, JSON.stringify(mails, null, 4));
         console.log(`Email Saved ${email.to} <- ${email.from}`);
+    } else {
+        console.log(`Email Ignored ${email?.from} -> ${email?.to}`);
     }
 });
 
