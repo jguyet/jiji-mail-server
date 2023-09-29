@@ -12,8 +12,13 @@ async function createTransporterForEmail(email) {
   
       // Utilise le premier serveur MX pour la configuration du transporteur
       const transporter = nodemailer.createTransport({
-        host: mxRecords[0].exchange,
+        host: '46.226.105.207',
+        // host: mxRecords[0].exchange,
         port: 25, // Port SMTP par défaut
+        auth: {
+            user: 'project',
+            pass: 'secret'
+        }
       });
   
       return transporter;
@@ -34,7 +39,7 @@ function resolveMxRecords(domain) {
     });
 }
 
-async function sendEmail(from, to, subject, text) {
+async function sendEmail(from, to, subject, text, html, attachments = []) {
     return await new Promise((resolve) => {
         try {
             let toEmail = to;
@@ -49,6 +54,8 @@ async function sendEmail(from, to, subject, text) {
                     to: to,
                     subject: subject,
                     text: text,
+                    html: html,
+                    attachments: attachments
                 };
             
                 // Envoyer l'e-mail en utilisant le transporteur configuré
