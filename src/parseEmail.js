@@ -5,20 +5,21 @@ async function parseEmail(message) {
     const mailparser = new MailParser();
 
     const emailData = {
-      headers: {},
+      // headers: {},
       text: '',
       html: '',
+      attachments: [],
       from: '',
       to: '',
       subject: '',
-      data: ''
+      // data: ''
     };
 
-    emailData.data = message;
+    // emailData.data = message;
 
     // Écoutez les événements de l'analyseur de messagerie pour extraire les informations
     mailparser.on('headers', (headers) => {
-      emailData.headers = headers;
+      // emailData.headers = headers;
       if (headers.get('from')) {
         emailData.from = headers.get('from')?.text ?? '';
       }
@@ -27,6 +28,9 @@ async function parseEmail(message) {
       }
       if (headers.get('subject')) {
         emailData.subject = headers.get('subject') ?? '';
+      }
+      if (headers.get('attachments')) {
+        emailData.attachments = headers.get('attachments') ?? [];
       }
     });
 
