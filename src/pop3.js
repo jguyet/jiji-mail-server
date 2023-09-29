@@ -20,31 +20,9 @@ const pop3Server = () => {
         let connectedUser = {
             connection: connection,
             authenticated: false,
+            mails: []
         };
 
-        // var mails = [
-        //     {
-        //         uid: 'm1',
-        //         size: 236,
-                // body: 'Date: Mon, 18 Oct 2004 04:11:45 +0200\r\n' +
-                //     'From: Someone <someone@example.org>\r\n' +
-                //     'To: you@example.org\r\n' +
-                //     'Subject: Some Subject\r\n' +
-                //     '\r\n' +
-                //     'Hello World!\r\n'
-        //     },
-        //     {
-        //         uid: 'm2',
-        //         size: 236,
-        //         body: 'Date: Mon, 18 Oct 2004 04:11:45 +0200\r\n' +
-        //             'From: Someone <someone@example.org>\r\n' +
-        //             'To: you@example.org\r\n' +
-        //             'Subject: Some Subject\r\n' +
-        //             '\r\n' +
-        //             'Hello World!\r\n'
-        //     }
-        // ];
-    
         console.log('Client connected');
     
         connection.on('authentication', function(user, pass, success){
@@ -82,14 +60,16 @@ const pop3Server = () => {
                 return callback([]);
             }
             const mails = JSON.parse(fs.readFileSync(path).toString());
-    
-            return callback(mails.map((x, index) => {
+
+            connectedUser.mails = mails.map((x, index) => {
                 return {
                     uid: x.uid,
                     size: toPopEmail(x).length,
                     body: toPopEmail(x)
                 };
-            }));
+            });
+    
+            return callback(connectedUser.mails);
         });
     
         connection.on('uidl', function(index, callback){
@@ -104,13 +84,19 @@ const pop3Server = () => {
                 return callback([]);
             }
             const mails = JSON.parse(fs.readFileSync(path).toString());
-            const lst = mails.map((x, index) => {
+
+            connectedUser.mails = mails.map((x, index) => {
+                return {
+                    uid: x.uid,
+                    size: toPopEmail(x).length,
+                    body: toPopEmail(x)
+                };
+            });
+            return callback(connectedUser.mails.map((x) => {
                 return {
                     uid: x.uid
                 };
-            });
-            console.log(lst);
-            return callback(lst);
+            }));
         });
     
         connection.on('retr', function(mail_index, callback){
@@ -118,28 +104,20 @@ const pop3Server = () => {
             if (connectedUser.authenticated == false) { // not authenticated
                 return callback(undefined);
             }
-
-            const path = `./mails/${connectedUser.user}.json`;
-            if (!fs.existsSync(path)) {
+            if (connectedUser.mails.length == 0) {
                 return callback(undefined);
             }
-            const mails = JSON.parse(fs.readFileSync(path).toString());
     
-            const selectedMail = mails[mail_index - 1];
+            const selectedMail = connectedUser.mails[mail_index - 1];
 
             if (selectedMail == undefined) {
                 return callback(undefined);
             }
-
-            callback({
-                uid: selectedMail.uid,
-                size: toPopEmail(selectedMail).length,
-                body: toPopEmail(selectedMail)
-            });
+            callback(selectedMail);
         });
 
         connection.on('dele', function(index, callback){
-            console.log('Deleting message ' + index);
+            console.log('Deleting message ' + mail_index);
             if (connectedUser.authenticated == false) { // not authenticated
                 return callback(undefined);
             }
@@ -148,14 +126,15 @@ const pop3Server = () => {
             if (!fs.existsSync(path)) {
                 return callback(undefined);
             }
+            if (connectedUser.mails.length == 0) {
+                return callback(undefined);
+            }
             const mails = JSON.parse(fs.readFileSync(path).toString());
-    
-            const selectedMail = mails[index - 1];
+            const selectedMail = connectedUser.mails[mail_index - 1];
 
             if (selectedMail == undefined) {
                 return callback(false);
             }
-            console.log('Mail', selectedMail.uid, 'Deleted');
             const newMails = mails.filter(x => x.uid != selectedMail.uid);
             fs.writeFileSync(path, JSON.stringify(newMails, null, 4));
             callback(true);
